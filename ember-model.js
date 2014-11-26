@@ -726,7 +726,7 @@ Ember.Model = Ember.Object.extend(Ember.Evented, {
         primaryKey = get(type, 'primaryKey');
         mapFunction = function(attrs) {
           reference = type._getOrCreateReferenceForId(attrs[primaryKey]);
-          reference.data = attrs;
+          set(reference,'data',attrs);
           return reference;
         };
       } else {
