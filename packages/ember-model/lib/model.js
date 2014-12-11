@@ -88,15 +88,15 @@ Ember.Model = Ember.Object.extend(Ember.Evented, {
 
     if (!reference) {
       reference = this.constructor._getOrCreateReferenceForId(id);
-      reference.record = this;
+      set(reference,'record',this);
       this._reference = reference;
     } else if (reference.id !== id) {
-      reference.id = id;
+      set(reference,'id',id);
       this.constructor._cacheReference(reference);
     }
 
     if (!reference.id) {
-      reference.id = id;
+      set(reference,'id',id);
     }
 
     return reference;
@@ -148,7 +148,7 @@ Ember.Model = Ember.Object.extend(Ember.Evented, {
       } else if (meta.isRelationship) {
         if (!klass._relationships) { klass._relationships = []; }
         klass._relationships.push(key);
-        meta.relationshipKey = key;
+        set(meta,'relationshipKey',key);
       }
     }
   },
