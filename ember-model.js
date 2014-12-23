@@ -339,9 +339,17 @@ Ember.ManyArray = Ember.RecordArray.extend({
 Ember.HasManyArray = Ember.ManyArray.extend({
   materializeRecord: function(idx) {
     var klass = get(this, 'modelClass'),
-        content = get(this, 'content'),
-        reference = content.objectAt(idx),
-        record;
+        content = get(this, 'content');
+
+    var reference;
+
+    if(idx < content.get('length')) {
+      reference = content.objectAt(idx);
+    } else { 
+      return undefined; 
+    }
+
+    var record;
 
     if (reference.record) {
       record = reference.record;
@@ -378,15 +386,25 @@ Ember.EmbeddedHasManyArray = Ember.ManyArray.extend({
   materializeRecord: function(idx) {
     var klass = get(this, 'modelClass'),
         primaryKey = get(klass, 'primaryKey'),
-        content = get(this, 'content'),
-        reference = content.objectAt(idx),
-        attrs = reference.data;
+        content = get(this, 'content');
+
+    var reference;
+
+    if(idx < content.get('length')) { 
+      reference = content.objectAt(idx);
+    } else { 
+      return undefined; 
+    }
+
+    var attrs = reference.data;
 
     if (reference.record) {
       return reference.record;
     } else {
       var record = klass.create({ _reference: reference });
+      
       set(reference,'record',record);
+      
       if (attrs) {
         record.load(attrs[primaryKey], attrs);
       }
